@@ -1,37 +1,37 @@
-// Firebase Configuration (Move these to a secure environment if possible)
+// ✅ Import Firebase Modules (Ensure Firebase v9+ Modular Syntax)
+import { initializeApp } from "firebase/app";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { initializeFirestore, persistentLocalCache } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
+// 🔒 Move sensitive credentials to environment variables if possible
 const firebaseConfig = {
   apiKey: "AIzaSyC_g04w-qJy-yNcsC6lUrz4wA8nfY0f5P0",
   authDomain: "athlze-c3ecc.firebaseapp.com",
   projectId: "athlze-c3ecc",
-  storageBucket: "athlze-c3ecc.firebasestorage.app",
+  storageBucket: "athlze-c3ecc.appspot.com",  // Fix incorrect storageBucket URL
   messagingSenderId: "2539610472",
   appId: "1:2539610472:web:7bffb073f221e9609d76dd",
   measurementId: "G-TSQ6R9BQ7S"
 };
 
-// 🔥 Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+// 🔥 Initialize Firebase App
+const firebaseApp = initializeApp(firebaseConfig);
 
-// 📢 Initialize Firebase Services
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
+// ✅ Initialize Firestore with new persistence settings
+const db = initializeFirestore(firebaseApp, {
+  localCache: persistentLocalCache({ tabManager: true }) // Replaces enablePersistence()
+});
+console.log("✅ Firestore initialized with new persistence settings");
 
-// ✅ Configure Authentication Persistence (LOCAL)
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+// ✅ Initialize Authentication & Set Local Persistence
+const auth = getAuth(firebaseApp);
+setPersistence(auth, browserLocalPersistence)
   .then(() => console.log("✅ Auth persistence set to LOCAL"))
   .catch(error => console.error("❌ Error setting auth persistence:", error));
 
-// ✅ Enable Firestore Offline Persistence with Multi-Tab Support
-db.enablePersistence({ synchronizeTabs: true })
-  .then(() => console.log("✅ Firestore persistence enabled for offline use"))
-  .catch(err => {
-    if (err.code === 'failed-precondition') {
-      console.error("❌ Multiple tabs open. Firestore persistence can only be enabled in one tab.");
-    } else if (err.code === 'unimplemented') {
-      console.error("❌ Firestore persistence is not supported in this browser.");
-    }
-  });
+// ✅ Initialize Firebase Storage
+const storage = getStorage(firebaseApp);
 
-// 🚀 Export Firebase Services (For Global Access)
-window.firebaseServices = { auth, db, storage };
+// 🚀 Export Firebase Services for Global Access
+export { auth, db, storage };
