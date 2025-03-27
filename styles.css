@@ -377,14 +377,6 @@ button.secondary:hover {
   margin-bottom: 1rem;
 }
 
-/* Chart Container */
-.chart-container {
-  width: 100%;
-  height: 300px;
-  position: relative;
-  margin-top: 1rem;
-  /* Will be implemented with a charting library */
-}
 
 /* Profile Page */
 .profile-header {
@@ -488,4 +480,46 @@ button.secondary:hover {
 
 .fadeIn {
   animation: fadeIn 0.5s ease;
+}
+
+
+/* Performance History Table */
+.performance-history-table {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.history-table th,
+.history-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.history-table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: rgba(0, 96, 240, 0.05);
+}
+
+.history-table tr:hover {
+  background-color: rgba(0, 96, 240, 0.02);
+}
+
+.delete-entry-btn {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--rounded);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.delete-entry-btn:hover {
+  background-color: #dc2626;
 }

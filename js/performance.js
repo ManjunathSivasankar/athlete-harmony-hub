@@ -48,17 +48,7 @@ function savePerformanceData() {
   });
 }
 
-// Load historical performance data for charts
-function loadPerformanceHistory() {
-  const user = auth.currentUser;
-  if (!user) return;
-  
-  // TODO: Implement chart visualization using a library like Chart.js
-  console.log('Loading performance history for charts...');
-}
-
 // Export performance functions to global scope
 window.performanceService = {
-  savePerformanceData,
-  loadPerformanceHistory
+  savePerformanceData
 };

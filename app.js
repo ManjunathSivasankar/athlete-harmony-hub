@@ -81,74 +81,74 @@ const pages = {
   `,
   
   dashboard: `
-    <nav class="navbar">
-      <div class="container flex justify-between items-center">
-        <a href="#" class="logo">Athlete Harmony Hub</a>
-        <ul>
-          <li><a href="#" id="nav-dashboard" class="active">Dashboard</a></li>
-          <li><a href="#" id="nav-performance">Performance</a></li>
-          <li><a href="#" id="nav-profile">Profile</a></li>
-          <li><a href="#" id="sign-out">Sign Out</a></li>
-        </ul>
-      </div>
-    </nav>
+  <nav class="navbar">
+    <div class="container flex justify-between items-center">
+      <a href="#" class="logo">Athlete Harmony Hub</a>
+      <ul>
+        <li><a href="#" id="nav-dashboard" class="active">Dashboard</a></li>
+        <li><a href="#" id="nav-performance">Performance</a></li>
+        <li><a href="#" id="nav-profile">Profile</a></li>
+        <li><a href="#" id="sign-out">Sign Out</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container mt-4">
+    <h1>Dashboard</h1>
+    <p class="mb-4">Welcome to your athlete dashboard. Track your performance metrics and health indicators.</p>
     
-    <div class="container mt-4">
-      <h1>Dashboard</h1>
-      <p class="mb-4">Welcome to your athlete dashboard. Track your performance metrics and health indicators.</p>
-      
-      <div class="dashboard-grid">
-        <div class="card metric-card">
-          <h3 class="metric-label">Average Speed</h3>
-          <div class="metric-value" id="avg-speed">--</div>
-          <p>km/hr</p>
-        </div>
-        
-        <div class="card metric-card">
-          <h3 class="metric-label">Heart Rate</h3>
-          <div class="metric-value" id="heart-rate">--</div>
-          <p>bpm</p>
-        </div>
-        
-        <div class="card metric-card">
-          <h3 class="metric-label">Blood Pressure</h3>
-          <div class="metric-value" id="blood-pressure">--</div>
-          <p>mmHg</p>
-        </div>
+    <div class="dashboard-grid">
+      <div class="card metric-card">
+        <h3 class="metric-label">Average Speed</h3>
+        <div class="metric-value" id="avg-speed">--</div>
+        <p>km/hr</p>
       </div>
       
-      <div class="card mt-4">
-        <h2 class="card-title">Performance History</h2>
-        <div id="performance-chart" class="chart-container">
-          <p class="text-center">Loading chart data...</p>
-        </div>
+      <div class="card metric-card">
+        <h3 class="metric-label">Heart Rate</h3>
+        <div class="metric-value" id="heart-rate">--</div>
+        <p>bpm</p>
       </div>
       
-      <div class="card mt-4">
-        <h2 class="card-title">AI Health Suggestions</h2>
-        <div id="health-suggestions">
-          <div class="loading-suggestions">
-            <div class="spinner"></div>
-            <p>Analyzing your metrics for personalized recommendations...</p>
+      <div class="card metric-card">
+        <h3 class="metric-label">Blood Pressure</h3>
+        <div class="metric-value" id="blood-pressure">--</div>
+        <p>mmHg</p>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <h2 class="card-title">Performance History</h2>
+      <div id="performance-chart" class="performance-history">
+        <p class="text-center">Loading performance data...</p>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <h2 class="card-title">AI Health Suggestions</h2>
+      <div id="health-suggestions">
+        <div class="loading-suggestions">
+          <div class="spinner"></div>
+          <p>Analyzing your metrics for personalized recommendations...</p>
+        </div>
+        <div class="suggestions-content" style="display: none;">
+          <div class="suggestions-category">
+            <h3><span class="icon">🏋️‍♂️</span> Training Recommendations</h3>
+            <div id="training-suggestions" class="suggestions-list"></div>
           </div>
-          <div class="suggestions-content" style="display: none;">
-            <div class="suggestions-category">
-              <h3><span class="icon">🏋️‍♂️</span> Training Recommendations</h3>
-              <div id="training-suggestions" class="suggestions-list"></div>
-            </div>
-            <div class="suggestions-category">
-              <h3><span class="icon">🥗</span> Nutrition Advice</h3>
-              <div id="nutrition-suggestions" class="suggestions-list"></div>
-            </div>
-            <div class="suggestions-category">
-              <h3><span class="icon">🧘</span> Recovery Tips</h3>
-              <div id="recovery-suggestions" class="suggestions-list"></div>
-            </div>
+          <div class="suggestions-category">
+            <h3><span class="icon">🥗</span> Nutrition Advice</h3>
+            <div id="nutrition-suggestions" class="suggestions-list"></div>
+          </div>
+          <div class="suggestions-category">
+            <h3><span class="icon">🧘</span> Recovery Tips</h3>
+            <div id="recovery-suggestions" class="suggestions-list"></div>
           </div>
         </div>
       </div>
     </div>
-  `,
+  </div>
+   `,
   
   profile: `
     <nav class="navbar">

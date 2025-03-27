@@ -1,5 +1,3 @@
-// Dashboard module for handling dashboard functionality
-
 // Load dashboard data
 function loadDashboardData() {
   const user = auth.currentUser;
@@ -55,6 +53,176 @@ function loadDashboardData() {
     .catch(error => {
       console.error('Error loading dashboard data:', error);
       setDefaultMetrics();
+    });
+    
+  // Load all performance entries for the history section
+  loadPerformanceHistory();
+}
+
+// Load performance history and display in a list instead of a chart
+function loadPerformanceHistory() {
+  const user = auth.currentUser;
+  if (!user) return;
+  
+  const performanceChartElement = document.getElementById('performance-chart');
+  if (!performanceChartElement) return;
+  
+  performanceChartElement.innerHTML = '<div class="spinner"></div><p class="text-center">Loading your performance history...</p>';
+  
+  db.collection('metrics')
+    .where('userId', '==', user.uid)
+    .orderBy('timestamp', 'desc')
+    .limit(10)
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        performanceChartElement.innerHTML = '<p class="text-center">No performance data recorded yet.</p>';
+        return;
+      }
+      
+      // Create a table to display performance history
+      let html = `
+        <div class="performance-history-table">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Speed (km/hr)</th>
+                <th>Heart Rate (bpm)</th>
+                <th>Blood Pressure</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const date = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : 'N/A';
+        
+        html += `
+          <tr data-id="${doc.id}">
+            <td>${date}</td>
+            <td>${data.speed || '--'}</td>
+            <td>${data.heartRate || '--'}</td>
+            <td>${(data.systolic && data.diastolic) ? `${data.systolic}/${data.diastolic}` : '--'}</td>
+            <td>${data.notes || '--'}</td>
+            <td>
+              <button class="delete-entry-btn" onclick="deletePerformanceEntry('${doc.id}')">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+      
+      performanceChartElement.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error loading performance history:', error);
+      performanceChartElement.innerHTML = '<p class="text-center text-danger">Error loading performance history. Please try again.</p>';
+    });
+}
+
+// Delete a performance entry
+function deletePerformanceEntry(docId) {
+  if (!confirm('Are you sure you want to delete this entry? This action cannot be undone.')) {
+    return;
+  }
+  
+  const user = auth.currentUser;
+  if (!user) {
+    console.error("User not authenticated.");
+    return;
+  }
+  
+  db.collection('metrics').doc(docId).get()
+    .then(doc => {
+      if (!doc.exists) {
+        alert('Entry not found.');
+        return;
+      }
+      
+      const data = doc.data();
+      if (data.userId !== user.uid) {
+        alert('You do not have permission to delete this entry.');
+        return;
+      }
+      
+      return db.collection('metrics').doc(docId).delete();
+    })
+    .then(() => {
+      console.log('Performance entry deleted successfully');
+      
+      // Remove the row from the table
+      const row = document.querySelector(`tr[data-id="${docId}"]`);
+      if (row) {
+        row.style.backgroundColor = '#ffeeee';
+        row.style.transition = 'background-color 0.5s ease';
+        
+        setTimeout(() => {
+          row.style.opacity = '0';
+          row.style.transition = 'opacity 0.5s ease';
+          
+          setTimeout(() => {
+            row.remove();
+            
+            // Check if table is empty
+            const tbody = document.querySelector('.history-table tbody');
+            if (tbody && tbody.children.length === 0) {
+              document.getElementById('performance-chart').innerHTML = 
+                '<p class="text-center">No performance data recorded yet.</p>';
+            }
+            
+            // Reload latest metrics for the dashboard
+            loadLatestMetrics();
+          }, 500);
+        }, 300);
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting performance entry:', error);
+      alert('Error deleting entry. Please try again.');
+    });
+}
+
+// Reload just the latest metrics after deletion
+function loadLatestMetrics() {
+  const user = auth.currentUser;
+  if (!user) return;
+  
+  db.collection('metrics')
+    .where('userId', '==', user.uid)
+    .orderBy('timestamp', 'desc')
+    .limit(1)
+    .get()
+    .then(snapshot => {
+      if (!snapshot.empty) {
+        const data = snapshot.docs[0].data();
+        
+        // Update metrics with animation
+        animateNumber('avg-speed', 0, data.speed || 0, 1000);
+        animateNumber('heart-rate', 0, data.heartRate || 0, 1000);
+        
+        const bloodPressureElement = document.getElementById('blood-pressure');
+        if (bloodPressureElement) {
+          bloodPressureElement.textContent = (data.systolic && data.diastolic) 
+            ? `${data.systolic}/${data.diastolic}` 
+            : '--';
+        }
+      } else {
+        setDefaultMetrics();
+      }
+    })
+    .catch(error => {
+      console.error('Error loading latest metrics:', error);
     });
 }
 
@@ -174,5 +342,7 @@ window.dashboardService = {
   loadDashboardData,
   showNoMetricsMessage,
   animateNumber,
-  generateAIHealthSuggestions
+  generateAIHealthSuggestions,
+  deletePerformanceEntry,
+  loadPerformanceHistory
 };
