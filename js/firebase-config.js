@@ -5,10 +5,9 @@ const firebaseConfig = {
   projectId: "athlze-c3ecc",
   storageBucket: "athlze-c3ecc.firebasestorage.app",
   messagingSenderId: "2539610472",
-  appId: "1:2539610472:web:b013cf1a3d46bcc69d76dd",
-  measurementId: "G-CHLWWGCBGD"
+  appId: "1:2539610472:web:7bffb073f221e9609d76dd",
+  measurementId: "G-TSQ6R9BQ7S"
 };
-
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   
