@@ -1,1 +1,1 @@
-https://athlete-harmony-hub.netlify app
+https://athlete-harmony-hub.netlify.app
